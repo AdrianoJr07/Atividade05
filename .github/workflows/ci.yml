@@ -1,4 +1,4 @@
-name: CI - Teste de Validação
+name: CI - Teste e Artefatos
 
 on:
   push:
@@ -28,4 +28,17 @@ jobs:
 
     - name: Executar testes
       run: |
-        pytest --maxfail=1 --disable-warnings
+        pytest --maxfail=1 --disable-warnings --junitxml=relatorio_testes.xml
+
+    - name: Criar artefato de exemplo
+      run: |
+        echo "Versão do Projeto: 1.0.0" > versao.txt
+        echo "Build gerado com sucesso." >> versao.txt
+
+    - name: Fazer upload dos artefatos
+      uses: actions/upload-artifact@v3
+      with:
+        name: artefatos-build
+        path: |
+          relatorio_testes.xml
+          versao.txt
